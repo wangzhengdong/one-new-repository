@@ -1,0 +1,115 @@
+﻿1.
+
+表名：购物信息  
+购物人      商品名称     数量  
+A            甲          2  
+B            乙          4  
+C            丙          1  
+A            丁          2  
+B            丙          5  
+……  
+  
+给出所有购入商品为两种或两种以上的购物人记录  
+
+select  custmer  from  (select  custmer , COUNT(*)  as gnum  from  buyinfo   group  by  custmer ) as a   where gnum>=2;
+
+
+select  *  from  buyinfo  where  custmer  in ( select  custmer  from buyinfo   group by  custmer  having  count(*)>=2)  ;
+
+select  *  from  buyinfo  where  custmer  in (select  custmer  from  (select  custmer , COUNT(*)  as gnum  from  buyinfo   group  by  custmer ) as a   where gnum>=2 );
+
+2.
+
+教师号　　星期号　是否有课
+
+　１　　　　２　　　有
+
+　１　　　　３　　　有
+
+　２　　　　１　　　有
+
+　３　　　　２　　　有`
+
+　１　　　　２　　　有
+
+写一条sql语句让你变为这样的表
+
+教师号　星期一　星期二　星期三
+
+　１　　　　　　　２　　　１　
+
+　２　　　１　　　
+
+　３　　　　　　　１
+
+
+select  a , (   select count(*)  from  table1  t where t.a=t1.a and b=1 )  as monday , 
+ (   select count(*)  from  table1  t where t.a=t1.a  and b=2 )  as  '星期二' ,
+ (   select count(*)  from  table1  t where t.a=t1.a  and b=3 )  as '星期三' 
+ from table1  t1  group by  a  ;
+
+
+select  a , (   select count(*)  from  table1  t where t.a=a and b=1 )  as monday , 
+ (   select count(*)  from  table1  t where t.a=a  and b=2 )  as  '星期二' ,
+ (   select count(*)  from  table1  t where t.a=a  and b=3 )  as '星期三' 
+ from table1  t1  group by  a  ;
+
+3
+
+DROP TABLE IF EXISTS `testtable1`;
+CREATE TABLE `testtable1` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `department` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of testtable1
+-- ----------------------------
+INSERT INTO `testtable1` VALUES ('1', '设计');
+INSERT INTO `testtable1` VALUES ('2', '市场');
+INSERT INTO `testtable1` VALUES ('3', '售后');
+
+DROP TABLE IF EXISTS `testtable2`;
+CREATE TABLE `testtable2` (
+  `t2id` int(11) NOT NULL AUTO_INCREMENT,
+  `dptID` int(11) DEFAULT NULL,
+  `name` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`t2id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of testtable2
+-- ----------------------------
+INSERT INTO `testtable2` VALUES ('1', '1', '张三');
+INSERT INTO `testtable2` VALUES ('2', '1', '李四');
+INSERT INTO `testtable2` VALUES ('3', '2', '王五');
+INSERT INTO `testtable2` VALUES ('4', '3', '彭六');
+INSERT INTO `testtable2` VALUES ('5', '4', '陈七');
+
+用一条SQL语句，怎么显示如下结果
+
+id dptID department name
+
+1   1      设计        张三
+
+2   1      设计        李四
+
+3   2      市场        王五
+
+4   3      售后        彭六
+
+5   4      黑人        陈七
+
+
+SELECT testtable2.* , Ifnull(department,'黑人')  as  deprtname
+
+FROM testtable1 right join testtable2 on testtable2.dptID = testtable1.ID
+
+ 4 
+rownum  自增
+select (@i:=@i+1)  as  rownum,t1.cid ,t1.sid ,t1.score  from score  t1  ,(select  @i:=0 )  as x  ;
+
+SELECT max(sid)  FROM (select  *  from  score  limit 4) as a  ;
+ 
+select  max(sid)  from  score  limit  4; 
